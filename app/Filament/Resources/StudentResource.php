@@ -12,6 +12,7 @@ use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 
 class StudentResource extends Resource
@@ -42,6 +43,9 @@ class StudentResource extends Resource
             ->imageCropAspectRatio('1:1')
             ->imageEditor()
             ->imageEditorAspectRatios(['1:1']),
+          TextInput::make('graduated_at')
+            ->label('Tahun Lulus')
+            ->type('number'),
         ])->columns(2),
       ]);
   }
@@ -50,15 +54,19 @@ class StudentResource extends Resource
   {
     return $table
       ->columns([
-        TextColumn::make('nim')->label('NIM'),
-        TextColumn::make('name')->label('Nama'),
+        TextColumn::make('nim')->label('NIM')->searchable(),
+        TextColumn::make('name')->label('Nama')->searchable(),
         TextColumn::make('gender')->label('Jenis Kelamin')
           ->formatStateUsing(
             fn (string $state): string => $state === 'male' ? 'Laki-laki' : 'Perempuan'
           ),
+        TextColumn::make('graduated_at')->label('Tahun Lulus'),
       ])
       ->filters([
-        //
+        SelectFilter::make('gender')->options([
+          'male' => 'Laki-laki',
+          'female' => 'Perempuan',
+        ]),
       ])
       ->actions([
         Tables\Actions\EditAction::make(),

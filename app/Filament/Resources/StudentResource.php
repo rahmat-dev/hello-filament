@@ -14,6 +14,7 @@ use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class StudentResource extends Resource
 {
@@ -66,7 +67,7 @@ class StudentResource extends Resource
         SelectFilter::make('gender')->options([
           'male' => 'Laki-laki',
           'female' => 'Perempuan',
-        ]),
+        ])->label('Jenis Kelamin'),
       ])
       ->actions([
         Tables\Actions\EditAction::make(),
@@ -75,7 +76,9 @@ class StudentResource extends Resource
         Tables\Actions\BulkActionGroup::make([
           Tables\Actions\DeleteBulkAction::make(),
         ]),
-      ]);
+        ExportBulkAction::make(),
+      ])
+      ->defaultSort('graduated_at', 'desc');
   }
 
   public static function getRelations(): array
